@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, sufiya. 🎂</title>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ff4757;
+      --secondary: #ffa502;
+      --accent: #2ed573;
+      --bg: #fff5f7;
+      --card-bg: #ffffff;
+      --text: #2f3542;
+      --subtext: #57606f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Background Emojis */
+    .balloon {
+      position: fixed;
+      bottom: -100px;
+      font-size: 2rem;
+      animation: floatUp 10s linear infinite;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .hero h3 {
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 4.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--subtext);
+      max-width: 600px;
+      margin-bottom: 25px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    /* Section Headers */
+    .section-title {
+      text-align: center;
+      margin: 60px 0 35px;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .section-title p {
+      color: var(--subtext);
+      font-size: 1rem;
+    }
+
+    /* Timeline Section */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: #ffd2d7;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -2px;
+    }
+
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      width: 50%;
+    }
+
+    .timeline-item.left { left: 0; text-align: right; }
+    .timeline-item.right { left: 50%; text-align: left; }
+
+    .timeline-item::after {
+      content: '🎈';
+      position: absolute;
+      top: 15px;
+      font-size: 1.2rem;
+      background: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .timeline-item.left::after { right: -15px; }
+    .timeline-item.right::after { left: -15px; }
+
+    .timeline-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .timeline-content h4 {
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    /* Photo Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 15px 15px 25px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      text-align: center;
+      transform: rotate(calc(var(--r, 0) * 1deg));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .polaroid:hover {
+      transform: scale(1.05) rotate(0deg);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+    }
+
+    .polaroid-img-placeholder {
+      width: 100%;
+      height: 220px;
+      background: #f1f2f6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a4b0be;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .polaroid-img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .polaroid-caption {
+      font-family: 'Sacramento', cursive;
+      font-size: 1.5rem;
+      color: var(--text);
+    }
+
+    /* Reasons Flip Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      height: 180px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .flip-card-front {
+      background: white;
+      color: var(--primary);
+      border: 1px solid #ffeaa7;
+    }
+
+    .flip-card-back {
+      background: var(--primary);
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    /* Letter Section */
+    .letter-container {
+      background: white;
+      padding: 40px 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      border-left: 6px solid var(--primary);
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin: 40px auto;
+    }
+
+    .letter-container h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* Surprise Box Section */
+    .surprise-box {
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      color: white;
+      padding: 40px 20px;
+      border-radius: 20px;
+      text-align: center;
+      margin: 40px 0;
+      box-shadow: 0 8px 24px rgba(255, 117, 140, 0.3);
+    }
+
+    .gift-icon {
+      font-size: 3.5rem;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+
+    .gift-icon:hover {
+      transform: scale(1.15) rotate(10deg);
+    }
+
+    .hidden-surprise {
+      display: none;
+      margin-top: 25px;
+      background: white;
+      color: var(--text);
+      padding: 20px;
+      border-radius: 12px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #a4b0be;
+      font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3.2rem; }
+      .timeline::after { left: 31px; }
+      .timeline-item { width: 100%; padding-left: 70px; padding-right: 20px; text-align: left; }
+      .timeline-item.right { left: 0%; }
+      .timeline-item.left::after, .timeline-item.right::after { left: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music (Optional: Add your song URL or local audio file) -->
+  <audio id="bgSong" loop>
+    <source src="birthday.mp3">
+  </audio>
+
+  <div class="container">
+    
+    <!-- 1. HERO SECTION -->
+    <section class="hero">
+      <h3>🎉 It's A Special Day!</h3>
+      <h1>Happy Birthday,sufiya</h1>
+      <p>Wishing you endless smiles, great moments, and everything your heart desires this year.</p>
+      
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="launchConfettiBurst()">Celebrate! 🎊</button>
+        <button class="btn btn-secondary" onclick="toggleAudio()">Play Music 🎵</button>
+      </div>
+    </section>
+
+    <!-- 2. MEMORY TIMELINE -->
+    <div class="section-title">
+      <h2>The Journey So Far</h2>
+      <p>A few unforgettable milestones and memories</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <h4>Chapter 1: Childhood Chaos</h4>
+          <p>Fighting over TV remotes, sharing snacks, and endless arguments over tiny things.</p>
+        </div>
+      </div>
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <h4>Chapter 2: Growing Up</h4>
+          <p>From silly games to supporting each other through exams, decisions, and real-life milestones.</p>
+        </div>
+      </div>
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <h4>Chapter 3: Always In My Corner</h4>
+          <p>No matter the distance or busy schedules, always knowing you are one call away.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PHOTO GALLERY -->
+    <div class="section-title">
+      <h2>Captured Memories</h2>
+      <p>Hover or tap to check out the memories</p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Replace the placeholder div with real <img> tags: <img src="photo1.jpg" alt="Memory"> -->
+      <div class="polaroid" style="--r: -2;">
+        <div class="polaroid-img-placeholder">📸 [<img src="photo1.jpg" alt="Memory" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px;">]</div>
+        <div class="polaroid-caption">Best smile!</div>
+      </div>
+      <div class="polaroid" style="--r: 3;">
+        <div class="polaroid-img-placeholder">📸 [<img src="photo2.jpg" alt="Memory" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px;">]</div>
+        <div class="polaroid-caption">Family trip vibes</div>
+      </div>
+      <div class="polaroid" style="--r: -3;">
+        <div class="polaroid-img-placeholder">📸 [<img src="photo3.jpg" alt="Memory" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px;">]</div>
+        <div class="polaroid-caption">Troublemakers</div>
+      </div>
+    </div>
+
+    <!-- 4. REASONS FLIP CARDS -->
+    <div class="section-title">
+      <h2>Why You're Amazing</h2>
+      <p>Click on each card to flip</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="flip-card" onclick="flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>🌟 Card #1</h3>
+            <p style="font-size: 0.85rem; color: #a4b0be; margin-top: 5px;">(Click to flip)</p>
+          </div>
+          <div class="flip-card-back">
+            <p>Your sense of humor and ability to make any situation lighter.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>🎁 Card #2</h3>
+            <p style="font-size: 0.85rem; color: #a4b0be; margin-top: 5px;">(Click to flip)</p>
+          </div>
+          <div class="flip-card-back">
+            <p>Always knowing what to say when things get tough or confusing.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h3>💡 Card #3</h3>
+            <p style="font-size: 0.85rem; color: #a4b0be; margin-top: 5px;">(Click to flip)</p>
+          </div>
+          <div class="flip-card-back">
+            <p>Your kindness and the genuine way you take care of people around you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. PERSONAL LETTER SECTION -->
+    <section class="letter-container">
+      <h3>A Quick Note For You... 💌</h3>
+      <p>
+        Dear Sis,
+      </p>
+      <br>
+      <p>
+        Another year older, wiser, and still the same amazing person. We don't say it every day, but having you as a sister makes life a lot more fun and meaningful. 
+      </p>
+      <br>
+      <p>
+        I hope this upcoming year brings you absolute peace of mind, high achievements in whatever you choose to focus on, and plenty of reasons to smile. Stay confident, keep chasing your goals, and know that you always have my full support.
+      </p>
+      <br>
+      <p style="font-weight: 600; color: var(--primary);">Happy Birthday once again! 🎂✨</p>
+    </section>
+
+    <!-- 6. SURPRISE GIFT BOX -->
+    <div class="surprise-box">
+      <h2>One Final Surprise!</h2>
+      <p>Tap the gift box to unlock it</p>
+      <div class="gift-icon" onclick="openSurprise()">🎁</div>
+      
+      <div class="hidden-surprise" id="surpriseBox">
+        <h3 style="color: var(--primary);">🎉 Your Birthday Coupon! 🎉</h3>
+        <p style="margin-top: 10px;">Valid for: <strong>1 Free Dinner / Favorite Treat + Unlimited favors for a week!</strong></p>
+      </div>
+    </div>
+
+    <footer>
+      <p>Coded with ❤️ especially for your birthday | 2026</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Confetti Animation
+    function launchConfettiBurst() {
+      const end = Date.now() + 1000;
+      const colors = ['#ff4757', '#ffa502', '#2ed573', '#1e90ff'];
+
+      (function frame() {
+        confetti({
+          particleCount: 4,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 4,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+
+    // Toggle Audio
+    let isPlaying = false;
+    function toggleAudio() {
+      const song = document.getElementById('bgSong');
+      if (isPlaying) {
+        song.pause();
+        isPlaying = false;
+      } else {
+        song.play().catch(e => console.log('Audio autoplay prevented'));
+        isPlaying = true;
+      }
+    }
+
+    // Flip Card logic
+    function flipCard(card) {
+      card.classList.toggle('flipped');
+      confetti({ particleCount: 20, spread: 45, origin: { y: 0.7 } });
+    }
+
+    // Surprise Box logic
+    function openSurprise() {
+      const box = document.getElementById('surpriseBox');
+      box.style.display = 'block';
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Floating balloons generator
+    const emojis = ['🎈', '✨', '💖', '🎉'];
+    setInterval(() => {
+      const el = document.createElement('div');
+      el.className = 'balloon';
+      el.style.left = Math.random() * 95 + 'vw';
+      el.style.animationDuration = (Math.random() * 5 + 6) + 's';
+      el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 10000);
+    }, 1200);
+
+    // Initial load burst
+    window.onload = () => {
+      launchConfettiBurst();
+    };
+  </script>
+</body>
+</html>
